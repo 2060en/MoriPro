@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Mori</string>
+    <string name="action_settings">設定</string>
+    <string name="main_screen_greeting">今天，你記帳了嗎？</string>
+    <string name="fab_content_description">新增一筆記帳</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+</resources>
