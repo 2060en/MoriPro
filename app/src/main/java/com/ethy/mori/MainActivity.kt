@@ -1,5 +1,6 @@
 package com.ethy.mori
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         // 為右上角的使用者圖示設定點擊事件
         binding.ivUserSetting.setOnClickListener {
-            Toast.makeText(this, "設定功能開發中！", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         // 為 Logo 圖示設定點擊事件（可選，這裡也加上測試）

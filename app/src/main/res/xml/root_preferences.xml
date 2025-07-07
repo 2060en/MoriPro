@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:title="通知設定">
+
+        <androidx.preference.SwitchPreferenceCompat
+            app:key="notifications_enabled"
+            app:title="開啟每日記帳提醒"
+            app:summary="在每日指定時間發送通知，提醒您記帳"/>
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:title="API 金鑰設定">
+        <EditTextPreference
+            app:key="key_notion_token"
+            app:title="Notion API Token"
+            app:summary="請輸入您的 Notion Internal Integration Token"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="key_notion_db_id"
+            app:title="Notion Database ID"
+            app:summary="請輸入您的 Notion 資料庫 ID"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="key_google_script_url"
+            app:title="Google Script URL"
+            app:summary="請輸入您的 Google Apps Script Web App 網址"
+            app:useSimpleSummaryProvider="true"/>
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

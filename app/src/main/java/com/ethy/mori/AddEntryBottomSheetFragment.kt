@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.ethy.mori.databinding.FragmentAddEntryBinding
 import com.ethy.mori.network.ApiClient
 import com.ethy.mori.network.GoogleSheetEntry
@@ -37,10 +38,6 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
     private var amount: String = ""
     private var itemDescription: String = ""
 
-    // ↓↓↓ 請將 "YOUR_NOTION_TOKEN" 和 "YOUR_DATABASE_ID" 替換成您自己的金鑰 ↓↓↓
-    private val NOTION_API_TOKEN = "Bearer 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"
-    private val NOTION_DATABASE_ID = "228da545b9708010bcf8dcf2619220cf"
-    private val GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJJ3lwEZ0nGBRa2ULQpyQf1lDXghHjBKfUo1BN8YCNOLB9pSzXQ_XTRaTCWERNIIH9zw/exec"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,94 +125,105 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
             showStep(2) // 切換回步驟二
         }
 
+        // --- 步驟三的儲存按鈕，加入更安全的驗證邏輯 ---
         binding.btnSave.setOnClickListener {
+            // --- 驗證邏輯區塊 ---
             val checkedChipId = binding.chipGroupCategory.checkedChipId
             if (checkedChipId == View.NO_ID) {
                 Toast.makeText(requireContext(), "請選擇一個分類", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // 在第一時間就驗證並轉換金額
+            val amountDouble = amount.toDoubleOrNull()
+            if (amountDouble == null) {
+                Toast.makeText(requireContext(), "金額格式不正確，請重新輸入", Toast.LENGTH_SHORT).show()
+                showStep(1) // 跳回第一步讓使用者修改
+                return@setOnClickListener
+            }
+            // --- 驗證結束 ---
+
             val selectedCategory = binding.root.findViewById<Chip>(checkedChipId).text.toString()
 
-            val finalRecord = "金額: $amount, 項目: $itemDescription, 分類: $selectedCategory"
-            Toast.makeText(requireContext(), "儲存成功！$finalRecord", Toast.LENGTH_LONG).show()
-            // 呼叫我們的新函式來發送資料
-            sendDataToNotion(amount, itemDescription, selectedCategory)
-            dismiss()
+            // 將驗證過的資料傳遞下去
+            sendDataToNotion(amountDouble, itemDescription, selectedCategory)
         }
     }
-    private fun sendDataToNotion(amountStr: String, description: String, category: String) {
-        // 1. 建立要發送的資料包裹 (這部分不變)
+    private fun sendDataToNotion(amount: Double, description: String, category: String) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val notionToken = prefs.getString("key_notion_token", "")
+        val notionDbId = prefs.getString("key_notion_db_id", "")
+
+        if (notionToken.isNullOrBlank() || notionDbId.isNullOrBlank()) {
+            Toast.makeText(requireContext(), "請先到設定頁面填寫 Notion API 金鑰", Toast.LENGTH_LONG).show()
+            return
+        }
+
         val requestBody = NotionPageRequest(
-            parent = Parent(databaseId = NOTION_DATABASE_ID),
+            parent = Parent(databaseId = notionDbId),
             properties = NotionProperties(
                 item = TitleProperty(listOf(TitleContent(TextContent(description)))),
-                amount = NumberProperty(amountStr.toDouble()),
+                amount = NumberProperty(amount), // 直接使用傳入的 Double
                 category = SelectProperty(SelectOption(category))
             )
         )
 
-        // 2. 取得 API 呼叫的 Call 物件
         val call = ApiClient.notionApiService.createPage(
-            token = NOTION_API_TOKEN,
+            token = "Bearer $notionToken",
             requestBody = requestBody
         )
 
-        // 3. 使用 enqueue 異步執行，並傳入一個回呼物件來處理結果
         call.enqueue(object : retrofit2.Callback<Unit> {
-
-            // 當收到伺服器回應時 (不論成功或失敗) 會被呼叫
             override fun onResponse(call: retrofit2.Call<Unit>, response: retrofit2.Response<Unit>) {
                 if (response.isSuccessful) {
-                    // Notion 寫入成功！
                     Log.d(TAG, "Notion API call successful.")
-
-                    // ↓↓↓ 在這裡，接著呼叫 Google Sheets 的函式！↓↓↓
-                    sendDataToGoogleSheets(amountStr, description, category)
-
-                    // 為了更好的使用者體驗，我們先不等 Google Sheets 回應，直接提示成功並關閉視窗
+                    sendDataToGoogleSheets(amount, description, category) // 接續呼叫，並傳遞 Double
                     context?.let { Toast.makeText(it, "🎉 記錄成功！", Toast.LENGTH_SHORT).show() }
                     Handler(Looper.getMainLooper()).postDelayed({ dismiss() }, 800)
                 } else {
-                    // 伺服器回傳錯誤 (例如 400, 401, 500)
                     val errorBody = response.errorBody()?.string()
                     Toast.makeText(requireContext(), "寫入 Notion 失敗: $errorBody", Toast.LENGTH_LONG).show()
                     Log.e(TAG, "Notion API Error: ${response.code()} - $errorBody")
                 }
             }
 
-            // 當網路發生問題 (例如沒網路) 或其他例外時會被呼叫
             override fun onFailure(call: retrofit2.Call<Unit>, t: Throwable) {
                 Toast.makeText(requireContext(), "發生網路錯誤: ${t.message}", Toast.LENGTH_LONG).show()
                 Log.e(TAG, "Network Failure: ", t)
             }
         })
     }
-    private fun sendDataToGoogleSheets(amountStr: String, description: String, category: String) {
+    private fun sendDataToGoogleSheets(amount: Double, description: String, category: String) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val scriptUrl = prefs.getString("key_google_script_url", "")
+
+        // 2. 檢查網址是否存在
+        if (scriptUrl.isNullOrBlank()) {
+            Log.e(TAG, "Google Script URL is not set in preferences.")
+            return // 如果沒設定，就默默地不執行，只記錄錯誤
+        }
+
+        // 3. 建立請求 (內容不變)
         val entry = GoogleSheetEntry(
             item = description,
             category = category,
-            amount = amountStr.toDouble()
+            amount = amount
         )
-
         val call = ApiClient.googleSheetsApiService.addEntry(
-            url = GOOGLE_SCRIPT_URL,
+            url = scriptUrl,
             entry = entry
         )
 
+        // 4. 發送請求 (Callback 內容不變)
         call.enqueue(object : retrofit2.Callback<Unit> {
             override fun onResponse(call: retrofit2.Call<Unit>, response: retrofit2.Response<Unit>) {
                 if (response.isSuccessful) {
-                    // Google Sheets 寫入成功，我們在背景記錄日誌即可
                     Log.d(TAG, "Google Sheets API call successful.")
                 } else {
-                    // Google Sheets 寫入失敗，同樣記錄日誌
                     Log.e(TAG, "Google Sheets API Error: ${response.code()} - ${response.errorBody()?.string()}")
                 }
             }
-
             override fun onFailure(call: retrofit2.Call<Unit>, t: Throwable) {
-                // Google Sheets 網路錯誤，同樣記錄日誌
                 Log.e(TAG, "Google Sheets Network Failure: ", t)
             }
         })
