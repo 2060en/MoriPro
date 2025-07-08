@@ -4,16 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-// @Database 註解，列出所有的 Entity 和資料庫版本號
 @Database(entities = [Reminder::class, Category::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    // 讓資料庫知道它管理的 DAO
     abstract fun reminderDao(): ReminderDao
     abstract fun categoryDao(): CategoryDao
 
-    // 使用 companion object 來建立一個單例 (Singleton)，確保 App 中只有一個資料庫實例
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -25,10 +26,35 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "mori_database"
                 )
+                    // 加入一個 Callback，在資料庫第一次被建立時觸發
+                    .addCallback(object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            // 使用協程在背景執行緒中預填資料
+                            INSTANCE?.let { database ->
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    populateDefaultCategories(database.categoryDao())
+                                }
+                            }
+                        }
+                    })
                     .build()
                 INSTANCE = instance
                 instance
             }
+        }
+
+        // 新增一個函式來預填預設分類
+        suspend fun populateDefaultCategories(categoryDao: CategoryDao) {
+            val defaultCategories = listOf(
+                Category(name = "飲食"),
+                Category(name = "交通"),
+                Category(name = "購物"),
+                Category(name = "娛樂"),
+                Category(name = "居家"),
+                Category(name = "其他")
+            )
+            defaultCategories.forEach { categoryDao.insert(it) }
         }
     }
 }

@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import com.ethy.mori.addentry.AddEntryViewModel
+import com.ethy.mori.addentry.AddEntryViewModelFactory
+import com.ethy.mori.data.AppDatabase
 import com.ethy.mori.databinding.FragmentAddEntryBinding
 import com.ethy.mori.network.ApiClient
 import com.ethy.mori.network.GoogleSheetEntry
@@ -38,6 +42,10 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
     private var amount: String = ""
     private var itemDescription: String = ""
 
+    private val addEntryViewModel: AddEntryViewModel by viewModels {
+        AddEntryViewModelFactory(AppDatabase.getInstance(requireContext()).categoryDao())
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +58,25 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupClickListeners()
+        // 開始觀察分類資料的變化
+        observeCategories()
+    }
+    private fun observeCategories() {
+        addEntryViewModel.allCategories.observe(viewLifecycleOwner) { categories ->
+            // 先清除所有舊的 Chip，避免重複增加
+            binding.chipGroupCategory.removeAllViews()
+
+            // 遍歷從資料庫拿到的所有分類
+            categories.forEach { category ->
+                // 為每一個分類，都建立一個新的 Chip 元件
+                val chip = Chip(context)
+                chip.text = category.name // 設定 Chip 的文字
+                chip.isClickable = true
+                chip.isCheckable = true
+                // 將 Chip 加入到 ChipGroup 容器中
+                binding.chipGroupCategory.addView(chip)
+            }
+        }
     }
 
     override fun onStart() {
