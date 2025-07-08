@@ -8,9 +8,8 @@
         <Preference
             app:key="key_reminder_settings"
             app:title="管理每日提醒"
-            app:summary="新增、編輯或刪除每日的記帳提醒"/>
-
-    </androidx.preference.PreferenceCategory>
+            app:summary="新增、編輯或刪除每日的記帳提醒"
+            app:icon="@drawable/ic_settings_reminders" /> </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         app:title="資料設定">
@@ -18,9 +17,8 @@
         <Preference
             app:key="key_category_settings"
             app:title="管理消費分類"
-            app:summary="新增或刪除您在記帳時的分類選項"/>
-
-    </androidx.preference.PreferenceCategory>
+            app:summary="新增或刪除您在記帳時的分類選項"
+            app:icon="@drawable/ic_settings_categories" /> </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         app:title="API 金鑰設定">
@@ -29,20 +27,17 @@
             app:key="key_notion_token"
             app:title="Notion API Token"
             app:summary="請輸入您的 Notion Internal Integration Token"
-            app:useSimpleSummaryProvider="true"/>
-
-        <EditTextPreference
-            app:key="key_notion_db_id"
-            app:title="Notion Database ID"
-            app:summary="請輸入您的 Notion 資料庫 ID"
-            app:useSimpleSummaryProvider="true"/>
-
-        <EditTextPreference
-            app:key="key_google_script_url"
-            app:title="Google Script URL"
-            app:summary="請輸入您的 Google Apps Script Web App 網址"
-            app:useSimpleSummaryProvider="true"/>
-
-    </androidx.preference.PreferenceCategory>
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_settings_key" /> <EditTextPreference
+        app:key="key_notion_db_id"
+        app:title="Notion Database ID"
+        app:summary="請輸入您的 Notion 資料庫 ID"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/ic_settings_database" /> <EditTextPreference
+        app:key="key_google_script_url"
+        app:title="Google Script URL"
+        app:summary="請輸入您的 Google Apps Script Web App 網址"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/ic_settings_link" /> </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
