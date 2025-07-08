@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
@@ -24,6 +25,7 @@
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_delete"
-        android:contentDescription="刪除分類"/>
+        android:contentDescription="刪除分類"
+        app:tint="?attr/colorControlNormal"/>
 
 </LinearLayout>

@@ -2,7 +2,21 @@
 <resources>
 
     <style name="Theme.Mori" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="preferenceTheme">@style/App.Theme.Preference</item>
 
+    </style>
+
+    <style name="App.Widget.Preference.Mori" parent="Preference.Material">
+        <item name="android:iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="App.Widget.PreferenceCategory.Mori" parent="Preference.Category.Material">
+        <item name="android:iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="App.Theme.Preference" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceStyle">@style/App.Widget.Preference.Mori</item>
+        <item name="preferenceCategoryStyle">@style/App.Widget.PreferenceCategory.Mori</item>
     </style>
 
     <style name="MyToolbarTitleStyle" parent="TextAppearance.MaterialComponents.Headline6">

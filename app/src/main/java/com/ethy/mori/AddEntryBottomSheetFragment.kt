@@ -57,6 +57,7 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showStep(0)
         setupClickListeners()
         // 開始觀察分類資料的變化
         observeCategories()
@@ -94,30 +95,31 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     // 一個新的函式，專門用來切換步驟，讓邏輯更清晰
-    private fun showStep(step: Int) {
-        // 先隱藏所有內容和按鈕
-        binding.step1Container.visibility = View.GONE
-        binding.step2Container.visibility = View.GONE
-        binding.step3Container.visibility = View.GONE
-        binding.btnNextToStep2.visibility = View.GONE
-        binding.buttonsContainerStep2.visibility = View.GONE
-        binding.buttonsContainerStep3.visibility = View.GONE
+    private fun showStep(targetStepIndex: Int) { // 我們將參數改為 0, 1, 2
+        // 取得目前顯示的是第幾頁
+        val currentStepIndex = binding.stepsViewFlipper.displayedChild
 
-        // 根據傳入的步驟號碼，顯示對應的內容和按鈕
-        when (step) {
-            1 -> {
-                binding.step1Container.visibility = View.VISIBLE
-                binding.btnNextToStep2.visibility = View.VISIBLE
-            }
-            2 -> {
-                binding.step2Container.visibility = View.VISIBLE
-                binding.buttonsContainerStep2.visibility = View.VISIBLE
-            }
-            3 -> {
-                binding.step3Container.visibility = View.VISIBLE
-                binding.buttonsContainerStep3.visibility = View.VISIBLE
-            }
+        // 如果目標頁面和當前頁面相同，則不做任何事
+        if (targetStepIndex == currentStepIndex) return
+
+        // 判斷是前進還是後退，並設定對應的動畫
+        if (targetStepIndex > currentStepIndex) {
+            // 前進：下一頁從右邊滑入，當前頁從左邊滑出
+            binding.stepsViewFlipper.setInAnimation(requireContext(), R.anim.slide_in_right)
+            binding.stepsViewFlipper.setOutAnimation(requireContext(), R.anim.slide_out_left)
+        } else {
+            // 後退：上一頁從左邊滑入，當前頁從右邊滑出
+            binding.stepsViewFlipper.setInAnimation(requireContext(), R.anim.slide_in_left)
+            binding.stepsViewFlipper.setOutAnimation(requireContext(), R.anim.slide_out_right)
         }
+
+        // 命令 ViewFlipper 切換到目標頁面
+        binding.stepsViewFlipper.displayedChild = targetStepIndex
+
+        // 同時，切換底部的按鈕
+        binding.buttonsContainerStep1.visibility = if (targetStepIndex == 0) View.VISIBLE else View.GONE
+        binding.buttonsContainerStep2.visibility = if (targetStepIndex == 1) View.VISIBLE else View.GONE
+        binding.buttonsContainerStep3.visibility = if (targetStepIndex == 2) View.VISIBLE else View.GONE
     }
 
     private fun setupClickListeners() {
@@ -129,12 +131,12 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
                 return@setOnClickListener
             }
             binding.tvAmountContext.text = "$ $amount"
-            showStep(2) // 呼叫新函式來切換到步驟二
+            showStep(1) // 呼叫新函式來切換到步驟二
         }
 
         // --- 步驟二 ---
         binding.btnBackToStep1.setOnClickListener {
-            showStep(1) // 切換回步驟一
+            showStep(0) // 切換回步驟一
         }
 
         binding.btnNextToStep3.setOnClickListener {
@@ -144,12 +146,12 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
                 return@setOnClickListener
             }
             binding.tvContextStep3.text = "$ $amount - $itemDescription"
-            showStep(3) // 切換到步驟三
+            showStep(2) // 切換到步驟三
         }
 
         // --- 步驟三 ---
         binding.btnBackToStep2.setOnClickListener {
-            showStep(2) // 切換回步驟二
+            showStep(1) // 切換回步驟二
         }
 
         // --- 步驟三的儲存按鈕，加入更安全的驗證邏輯 ---
@@ -165,7 +167,7 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
             val amountDouble = amount.toDoubleOrNull()
             if (amountDouble == null) {
                 Toast.makeText(requireContext(), "金額格式不正確，請重新輸入", Toast.LENGTH_SHORT).show()
-                showStep(1) // 跳回第一步讓使用者修改
+                showStep(0) // 跳回第一步讓使用者修改
                 return@setOnClickListener
             }
             // --- 驗證結束 ---

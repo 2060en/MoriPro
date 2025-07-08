@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
-    <FrameLayout
-        android:id="@+id/steps_content_container"
+    <ViewFlipper
+        android:id="@+id/steps_view_flipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttons_container_step1">
@@ -49,7 +49,8 @@
                     android:hint="輸入金額"
                     android:inputType="numberDecimal"
                     android:padding="16dp"
-                    android:textColorHint="@color/dark_gray_hint"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -94,7 +95,8 @@
                     android:hint="輸入說明 (例如：晚餐)"
                     android:inputType="text"
                     android:padding="16dp"
-                    android:textColorHint="@color/dark_gray_hint"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -143,7 +145,7 @@
 
         </RelativeLayout>
 
-    </FrameLayout>
+    </ViewFlipper>
 
     <LinearLayout
         android:id="@+id/buttons_container_step1"
