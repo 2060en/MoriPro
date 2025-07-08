@@ -28,16 +28,22 @@
             app:title="Notion API Token"
             app:summary="請輸入您的 Notion Internal Integration Token"
             app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/ic_settings_key" /> <EditTextPreference
+            app:icon="@drawable/ic_settings_key"
+            app:dialogTheme="@style/Theme.Mori.RoundedDialog"/>
+        <EditTextPreference
         app:key="key_notion_db_id"
         app:title="Notion Database ID"
         app:summary="請輸入您的 Notion 資料庫 ID"
         app:useSimpleSummaryProvider="true"
-        app:icon="@drawable/ic_settings_database" /> <EditTextPreference
+            app:icon="@drawable/ic_settings_database"
+        app:dialogTheme="@style/Theme.Mori.RoundedDialog"/>
+        <EditTextPreference
         app:key="key_google_script_url"
         app:title="Google Script URL"
         app:summary="請輸入您的 Google Apps Script Web App 網址"
         app:useSimpleSummaryProvider="true"
-        app:icon="@drawable/ic_settings_link" /> </androidx.preference.PreferenceCategory>
+            app:icon="@drawable/ic_settings_link"
+        app:dialogTheme="@style/Theme.Mori.RoundedDialog"/>
+    </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

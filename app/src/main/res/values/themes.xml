@@ -2,8 +2,7 @@
 <resources>
 
     <style name="Theme.Mori" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="materialAlertDialogTheme">@style/App.Dialog.Theme</item>
-        <item name="alertDialogTheme">@style/App.Dialog.Theme</item>
+
     </style>
 
     <style name="MyToolbarTitleStyle" parent="TextAppearance.MaterialComponents.Headline6">
@@ -20,11 +19,9 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-    <style name="App.ShapeAppearance.Dialog.Rounded" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">28dp</item> </style>
 
-    <style name="App.Dialog.Theme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="shapeAppearanceMediumComponent">@style/App.ShapeAppearance.Dialog.Rounded</item>
+    <style name="Theme.Mori.RoundedDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="dialogCornerRadius">24dp</item>
     </style>
+
 </resources>

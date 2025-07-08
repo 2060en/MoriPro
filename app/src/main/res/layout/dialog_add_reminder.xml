@@ -22,7 +22,8 @@
             android:id="@+id/et_reminder_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="嘿，今天記帳了嗎？" />
+            android:text="嘿，今天記帳了嗎？"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 

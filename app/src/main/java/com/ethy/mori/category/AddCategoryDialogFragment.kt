@@ -7,14 +7,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.ethy.mori.R
 import com.ethy.mori.databinding.DialogAddCategoryBinding
 
 class AddCategoryDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            val builder = AlertDialog.Builder(it)
+            val builder = AlertDialog.Builder(it, R.style.Theme_Mori_RoundedDialog)
             val inflater = requireActivity().layoutInflater
+
             val binding = DialogAddCategoryBinding.inflate(inflater)
 
             builder.setView(binding.root)
