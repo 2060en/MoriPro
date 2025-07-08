@@ -14,6 +14,8 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import java.util.*
 import android.Manifest
+import androidx.preference.Preference
+import com.ethy.mori.CategoryListActivity
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -34,22 +36,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
-        val notificationSwitch = findPreference<SwitchPreferenceCompat>("notifications_enabled")
+        // 找到「管理每日提醒」這個設定項
+        val reminderSettingsPreference: Preference? = findPreference("key_reminder_settings")
+        // 為它設定點擊事件
+        reminderSettingsPreference?.setOnPreferenceClickListener {
+            // 建立一個 Intent 來啟動 ReminderListActivity
+            val intent = Intent(requireContext(), ReminderListActivity::class.java)
+            startActivity(intent)
+            true // 回傳 true 表示事件已被處理
+        }
 
-        notificationSwitch?.setOnPreferenceChangeListener { _, newValue ->
-            val isEnabled = newValue as Boolean
-            if (isEnabled) {
-                // 當使用者要打開開關時，我們啟動權限檢查流程
-                checkAndRequestNotificationPermission()
-                // 我們回傳 false，因為我們會手動在權限回呼中更新開關狀態
-                return@setOnPreferenceChangeListener false
-            } else {
-                // 當使用者關閉開關時，我們直接取消鬧鐘
-                cancelAlarm()
-                Toast.makeText(requireContext(), "已取消每日記帳提醒", Toast.LENGTH_SHORT).show()
-                // 我們回傳 true，讓系統自動將開關的外觀更新為「關閉」
-                return@setOnPreferenceChangeListener true
-            }
+        val categorySettingsPreference: Preference? = findPreference("key_category_settings")
+        categorySettingsPreference?.setOnPreferenceClickListener {
+            val intent = Intent(requireContext(), CategoryListActivity::class.java)
+            startActivity(intent)
+            true
         }
     }
 

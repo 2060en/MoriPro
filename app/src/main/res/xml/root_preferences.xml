@@ -3,17 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.PreferenceCategory
-        app:title="通知設定">
+        app:title="提醒功能">
 
-        <androidx.preference.SwitchPreferenceCompat
-            app:key="notifications_enabled"
-            app:title="開啟每日記帳提醒"
-            app:summary="在每日指定時間發送通知，提醒您記帳"/>
+        <Preference
+            app:key="key_reminder_settings"
+            app:title="管理每日提醒"
+            app:summary="新增、編輯或刪除每日的記帳提醒"/>
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:title="資料設定">
+
+        <Preference
+            app:key="key_category_settings"
+            app:title="管理消費分類"
+            app:summary="新增或刪除您在記帳時的分類選項"/>
 
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         app:title="API 金鑰設定">
+
         <EditTextPreference
             app:key="key_notion_token"
             app:title="Notion API Token"

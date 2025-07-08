@@ -10,12 +10,14 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"> <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/settings_toolbar"
-        style="@style/Widget.App.Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:title="設定" />
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/settings_toolbar"
+            style="@style/Widget.App.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            app:title="設定" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
