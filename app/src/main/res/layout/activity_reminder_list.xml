@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             style="@style/Widget.App.Toolbar"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="58dp"
             app:title="提醒設定" /> </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

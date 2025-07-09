@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -57,6 +58,11 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // ✨ --- 新增這一行 --- ✨
+        // 這會告訴系統，當鍵盤出現時，自動調整視窗大小，而不是把整個畫面往上推
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         showStep(0)
         setupClickListeners()
         // 開始觀察分類資料的變化
@@ -86,11 +92,37 @@ class AddEntryBottomSheetFragment : BottomSheetDialogFragment() {
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         if (bottomSheet != null) {
             val windowHeight = resources.displayMetrics.heightPixels
+            // ✨ --- 修改這裡的邏輯 --- ✨
+            // 我們現在讓它預設佔 40%，當鍵盤彈出時，高度會由系統自動調整
             val layoutParams = bottomSheet.layoutParams
-            layoutParams.height = (windowHeight * 0.40).toInt()
+            layoutParams.height = (windowHeight * 0.40).toInt() // 維持原本的 40%
             bottomSheet.layoutParams = layoutParams
             val behavior = BottomSheetBehavior.from(bottomSheet)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+            // ✨ --- 新增鍵盤監聽 --- ✨
+            // 這是你的「暴力解方」的優化版，我們監聽佈局變化來判斷鍵盤狀態
+            val rootView = requireActivity().window.decorView.rootView
+            rootView.viewTreeObserver.addOnGlobalLayoutListener {
+                val r = android.graphics.Rect()
+                rootView.getWindowVisibleDisplayFrame(r)
+                val screenHeight = rootView.height
+                val keypadHeight = screenHeight - r.bottom
+
+                if (keypadHeight > screenHeight * 0.15) { // 鍵盤彈出
+                    // 當鍵盤彈出時，將 BottomSheet 的高度設定為 80%
+                    if (layoutParams.height != (windowHeight * 0.80).toInt()) {
+                        layoutParams.height = (windowHeight * 0.80).toInt()
+                        bottomSheet.layoutParams = layoutParams
+                    }
+                } else { // 鍵盤收起
+                    // 當鍵盤收起時，恢復為原本的 40%
+                    if (layoutParams.height != (windowHeight * 0.40).toInt()) {
+                        layoutParams.height = (windowHeight * 0.40).toInt()
+                        bottomSheet.layoutParams = layoutParams
+                    }
+                }
+            }
         }
     }
 

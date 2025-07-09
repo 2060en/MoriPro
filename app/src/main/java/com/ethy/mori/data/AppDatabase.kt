@@ -51,7 +51,7 @@ abstract class AppDatabase : RoomDatabase() {
                 Category(name = "交通"),
                 Category(name = "購物"),
                 Category(name = "娛樂"),
-                Category(name = "居家"),
+                Category(name = "必需品"),
                 Category(name = "其他")
             )
             defaultCategories.forEach { categoryDao.insert(it) }

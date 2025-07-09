@@ -16,14 +16,14 @@
             android:layout_height="match_parent"
             android:visibility="visible">
 
-            <View
-                android:id="@+id/view_spacer_step1"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:minHeight="24dp"
-                android:minWidth="48dp" />
+                android:layout_alignParentStart="true"
+                android:text="新增"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                     android:layout_marginTop="24dp"
                     android:background="@drawable/edit_text_background_capsule"
                     android:gravity="center"
-                    android:hint="輸入說明 (例如：晚餐)"
+                    android:hint="輸入項目 (例如：晚餐)"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textColor="?attr/colorOnSurface"
@@ -171,7 +171,6 @@
 
         <Button
             android:id="@+id/btn_back_to_step1"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -197,7 +196,6 @@
 
         <Button
             android:id="@+id/btn_back_to_step2"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
