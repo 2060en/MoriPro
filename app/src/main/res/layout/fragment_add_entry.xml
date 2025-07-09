@@ -5,155 +5,63 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
-    <ViewFlipper
-        android:id="@+id/steps_view_flipper"
+    <TextView
+        android:id="@+id/tv_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="新增"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/buttons_container_step1">
-        <RelativeLayout
-            android:id="@+id/step1_container"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="花了多少錢？"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_main_input"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/edit_text_background_capsule"
+            android:gravity="center"
+            android:hint="輸入金額"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant"
+            android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:text="新增"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            app:singleSelection="true"
+            app:chipSpacingVertical="1dp"
+            android:visibility="gone" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="花了多少錢？"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/edit_text_background_capsule"
-                    android:gravity="center"
-                    android:hint="輸入金額"
-                    android:inputType="numberDecimal"
-                    android:padding="16dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOnSurfaceVariant"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/step2_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_amount_context"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="$150"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="用在哪裡呢？"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_item_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/edit_text_background_capsule"
-                    android:gravity="center"
-                    android:hint="輸入項目 (例如：晚餐)"
-                    android:inputType="text"
-                    android:padding="16dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOnSurfaceVariant"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/step3_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_context_step3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="$150 - 晚餐"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="這是什麼類別？"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chip_group_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="24dp"
-                    app:singleSelection="true">
-
-                </com.google.android.material.chip.ChipGroup>
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </ViewFlipper>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/buttons_container_step1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="visible">
-
+        android:visibility="gone">
         <Button
             android:id="@+id/btn_next_to_step2"
             android:layout_width="match_parent"
@@ -171,6 +79,7 @@
 
         <Button
             android:id="@+id/btn_back_to_step1"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -196,6 +105,7 @@
 
         <Button
             android:id="@+id/btn_back_to_step2"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -14,7 +14,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/settings_toolbar"
-            style="@style/Widget.App.Toolbar"
+            style="@style/Widget.App.Toolbar.Settings"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             app:title="設定" />
@@ -24,6 +24,8 @@
     <FrameLayout
         android:id="@+id/settings_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
 </LinearLayout>

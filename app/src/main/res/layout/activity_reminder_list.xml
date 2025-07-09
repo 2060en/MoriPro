@@ -14,7 +14,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.App.Toolbar"
+            style="@style/Widget.App.Toolbar.Settings"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             app:title="提醒設定" /> </com.google.android.material.appbar.AppBarLayout>
@@ -24,6 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         tools:listitem="@layout/list_item_reminder" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_reminder"
