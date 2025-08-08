@@ -9,10 +9,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Reminder::class, Category::class], version = 1, exportSchema = false)
+@Database(entities = [Category::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun reminderDao(): ReminderDao
     abstract fun categoryDao(): CategoryDao
 
     companion object {
